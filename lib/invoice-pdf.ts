@@ -1,0 +1,58 @@
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+export type InvoicePdfLine = { description: string; quantity: number; unit: string; unitPrice: number; total: number };
+export type InvoicePdfData = { id: string; customer: string; customerType?: string; poultryCategory?: string; building?: string; unitLabel: string; issueDate: string; taxRate: number; subtotal: number; tax: number; total: number; paid: number; remaining: number; status: string; paymentMethod: string; lines: InvoicePdfLine[] };
+
+export function downloadInvoicePdf(invoice: InvoicePdfData) {
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  doc.setTextColor(25, 56, 46);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(19);
+  doc.text('SCOOPS LE REVEIL', 14, 18);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('AgroFlux · Gestion intégrée', 14, 24);
+  doc.text('Yaoundé, Cameroun', 14, 29);
+  doc.text('+237 6 70 00 12 45', 14, 34);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(17);
+  doc.text('FACTURE', 196, 19, { align: 'right' });
+  doc.setFontSize(11);
+  doc.text(invoice.id, 196, 26, { align: 'right' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text(`Date : ${invoice.issueDate}`, 196, 34, { align: 'right' });
+  doc.text(`Unité : ${invoice.unitLabel}`, 196, 40, { align: 'right' });
+  doc.setFillColor(242, 249, 239);
+  doc.roundedRect(14, 48, 182, 22, 3, 3, 'F');
+  doc.setTextColor(25, 56, 46);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CLIENT', 20, 57);
+  doc.setFont('helvetica', 'normal');
+  doc.text(invoice.customer || 'Client non renseigné', 20, 64);
+  if (invoice.customerType) doc.text(`Type : ${invoice.customerType}`, 112, 64);
+  if (invoice.poultryCategory) doc.text(`Catégorie : ${invoice.poultryCategory}`, 112, 57);
+  if (invoice.building) doc.text(`Bâtiment : ${invoice.building}`, 112, 64);
+  autoTable(doc, { startY: 80, head: [['Description', 'Catégorie', 'Qté', 'Prix unitaire', 'Montant']], body: invoice.lines.map((line) => [line.description, invoice.poultryCategory ?? 'Poulet', `${line.quantity} ${line.unit}`, `${line.unitPrice.toLocaleString('fr-FR')} FCFA`, `${line.total.toLocaleString('fr-FR')} FCFA`]), styles: { fontSize: 8, cellPadding: 3 }, headStyles: { fillColor: [25, 56, 46], textColor: 255 }, alternateRowStyles: { fillColor: [248, 251, 247] } });
+  const tableEnd = (doc as any).lastAutoTable?.finalY ?? 110;
+  const summaryTop = Math.max(tableEnd + 12, 125);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(`Sous-total : ${invoice.subtotal.toLocaleString('fr-FR')} FCFA`, 125, summaryTop);
+  doc.text(`TVA (${invoice.taxRate} %) : ${invoice.tax.toLocaleString('fr-FR')} FCFA`, 125, summaryTop + 7);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text(`TOTAL TTC : ${invoice.total.toLocaleString('fr-FR')} FCFA`, 125, summaryTop + 17);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(`Versement : ${invoice.paid.toLocaleString('fr-FR')} FCFA`, 125, summaryTop + 27);
+  doc.text(`Reste à payer : ${invoice.remaining.toLocaleString('fr-FR')} FCFA`, 125, summaryTop + 34);
+  doc.text(`Statut : ${invoice.status}`, 14, summaryTop + 27);
+  doc.text(`Mode de paiement : ${invoice.paymentMethod || 'Non renseigné'}`, 14, summaryTop + 34);
+  doc.setDrawColor(220, 230, 220);
+  doc.line(14, 270, 196, 270);
+  doc.setFontSize(8);
+  doc.text('Document généré par AgroFlux · SCOOPS LE REVEIL', 14, 278);
+  doc.save(`${invoice.id}.pdf`);
+}
