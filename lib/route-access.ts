@@ -130,6 +130,7 @@ export function accessRequirementsForPath(pathname: string, unitId?: UnitId): st
   if (pathname.startsWith('/rapports')) return unitId ? [financeAccess(unitId, 'rapports')] : units.map((unit) => financeAccess(unit.id, 'rapports'));
 
   if (pathname.startsWith('/mouvements')) return ['Mouvements inter-unités'];
+  if (pathname.endsWith('/taches') || pathname.endsWith('/suivi-taches')) return ['Tâches quotidiennes'];
   if (pathname.startsWith('/stocks/attributions')) return ['Articles confiés'];
   if (pathname.startsWith('/stocks')) {
     if (unitId === 'poulets') return ['Stock de la ferme'];

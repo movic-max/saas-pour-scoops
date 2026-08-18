@@ -58,6 +58,8 @@ export const FARM_STORAGE_KEYS = {
   rhPayroll: 'agroflux-rh-payroll',
   rhDocuments: 'agroflux-rh-documents',
   rhSettings: 'agroflux-rh-settings',
+  rhTaskTemplates: 'agroflux-rh-task-templates',
+  dailyTasks: 'agroflux-daily-tasks',
   centralStock: 'agroflux-magasin-central-stock',
   centralMovements: 'agroflux-magasin-central-movements',
   centralCategories: 'agroflux-magasin-central-categories',

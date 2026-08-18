@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   Activity, AlertTriangle, ArrowLeftRight, BarChart3, Bell, Boxes, ChevronDown, ChevronLeft, ChevronRight,
-  CalendarDays, CircleDollarSign, ClipboardList, CreditCard, FileText, FlaskConical, Home, Leaf, Menu, Package, PanelLeft,
+  CalendarDays, CircleDollarSign, ClipboardCheck, ClipboardList, CreditCard, FileText, FlaskConical, Home, Leaf, Menu, Package, PanelLeft,
   LogOut, MessageCircle, Plus, Receipt, Search, Settings, ShoppingCart, Sparkles, Sprout, Store, Truck, Users, Wheat,
   X, Droplets, PawPrint, ShieldCheck, WalletCards, Factory, Wrench,
 } from 'lucide-react';
@@ -53,6 +53,7 @@ const provenderieNavigation: { label: string; items: { label: string; href: stri
     { label: 'Stock aliments finis', href: '/provenderie/stocks', icon: Package },
     { label: 'Mouvements inter-unités', href: '/mouvements/provenderie', icon: ArrowLeftRight },
     { label: 'Articles confiés', href: '/stocks/attributions/provenderie', icon: ClipboardList },
+    { label: 'Tâches quotidiennes', href: '/provenderie/taches', icon: ClipboardCheck },
   ] },
   { label: 'Contacts de l’unité', items: [
     { label: 'Clients provenderie', href: '/clients/provenderie', icon: Users },
@@ -77,6 +78,7 @@ const bioNavigation: { label: string; items: { label: string; href: string; icon
     { label: 'Stock produits bio', href: '/produits-bio/stocks', icon: Package },
     { label: 'Mouvements inter-unités', href: '/mouvements/bio', icon: ArrowLeftRight },
     { label: 'Articles confiés', href: '/stocks/attributions/bio', icon: ClipboardList },
+    { label: 'Tâches quotidiennes', href: '/produits-bio/taches', icon: ClipboardCheck },
   ] },
   { label: 'Contacts de l’unité', items: [
     { label: 'Clients produits bio', href: '/clients/bio', icon: Users },
@@ -101,6 +103,7 @@ const pressoirNavigation: { label: string; items: { label: string; href: string;
     { label: 'Stock huile et tourteaux', href: '/pressoir/stocks', icon: Package },
     { label: 'Mouvements inter-unités', href: '/mouvements/pressoir', icon: ArrowLeftRight },
     { label: 'Articles confiés', href: '/stocks/attributions/pressoir', icon: ClipboardList },
+    { label: 'Tâches quotidiennes', href: '/pressoir/taches', icon: ClipboardCheck },
   ] },
   { label: 'Contacts de l’unité', items: [
     { label: 'Clients pressoir', href: '/clients/pressoir', icon: Users },
@@ -125,6 +128,7 @@ const centralStoreNavigation: { label: string; items: { label: string; href: str
     { label: 'Articles confiés', href: '/stocks/attributions/stocks', icon: ClipboardList },
     { label: 'Mouvements inter-unités', href: '/mouvements/stocks', icon: ArrowLeftRight },
     { label: 'Inventaire général', href: '/stocks/inventaire', icon: ClipboardList },
+    { label: 'Tâches quotidiennes', href: '/stocks/taches', icon: ClipboardCheck },
   ] },
   { label: 'Contacts de l’unité', items: [
     { label: 'Clients magasin', href: '/clients/stocks', icon: Users },
@@ -151,6 +155,7 @@ const goatNavigation: { label: string; items: { label: string; href: string; ico
     { label: 'Stock produits', href: '/chevrerie/stocks', icon: Package },
     { label: 'Mouvements inter-unités', href: '/mouvements/chevrerie', icon: ArrowLeftRight },
     { label: 'Articles confiés', href: '/stocks/attributions/chevrerie', icon: ClipboardList },
+    { label: 'Tâches quotidiennes', href: '/chevrerie/taches', icon: ClipboardCheck },
   ] },
   { label: 'Contacts de l’unité', items: [
     { label: 'Clients chèvrerie', href: '/clients/chevrerie', icon: Users },
@@ -174,6 +179,10 @@ const rhNavigation: { label: string; items: { label: string; href: string; icon:
     { label: 'Congés & permissions', href: '/rh/conges', icon: CalendarDays },
     { label: 'Paie & paiements', href: '/rh/paie', icon: WalletCards },
     { label: 'Documents administratifs', href: '/rh/documents', icon: FileText },
+  ] },
+  { label: 'Tâches quotidiennes', items: [
+    { label: 'Planning type', href: '/rh/taches', icon: ClipboardCheck },
+    { label: 'Suivi & validation', href: '/rh/suivi-taches', icon: ShieldCheck },
   ] },
   { label: 'Communication', items: [
     { label: 'Messagerie privée', href: '/chat/rh', icon: MessageCircle },
@@ -203,6 +212,7 @@ const farmNavigation: { label: string; items: { label: string; href: string; ico
     { label: 'Stock de la ferme', href: '/stocks/ferme', icon: Boxes },
     { label: 'Articles confiés', href: '/stocks/attributions/poulets', icon: ClipboardList },
     { label: 'Transferts internes', href: '/poulets/transferts', icon: ArrowLeftRight },
+    { label: 'Tâches quotidiennes', href: '/poulets/taches', icon: ClipboardCheck },
     { label: 'Mouvements inter-unités', href: '/mouvements/ferme', icon: ArrowLeftRight },
   ] },
   { label: 'Contacts de l’unité', items: [
